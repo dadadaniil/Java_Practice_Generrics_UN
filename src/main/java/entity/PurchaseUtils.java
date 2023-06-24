@@ -1,36 +1,39 @@
 package entity;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 
-public class PurchaseUtils {
-    private Purchase purchase;
+public class PurchaseUtils<T extends Priceable, N extends Number> {
+    private final Purchase<T, N> purchase;
 
-    public PurchaseUtils(Purchase purchase) {
+    public PurchaseUtils(Purchase<T, N> purchase) {
         this.purchase = purchase;
     }
 
-    public Purchase getPurchase() {
+    public Purchase<T, N> getPurchase() {
         return purchase;
     }
 
     public void printPurchase() {
-        System.out.println(purchase.getItem().getName() + "," + purchase.getQuantity());
+        System.out.println(purchase);
     }
 
     public void printCost() {
-        System.out.println("cost = " + purchase.getCost() + " Euro");
+        System.out.println(purchase.getCost());
     }
 
-    public void printCostDiff(Purchase p) {
-        BigDecimal diff = purchase.getCost().subtract(p.getCost());
-        String symbol = diff.signum() > 0 ? "+" : (diff.signum() < 0 ? "-" : "");
-        System.out.println(symbol + " diff = " + diff.abs() + " Euro");
+    public void printCostDiff(Purchase<? extends Priceable, ? extends Number> p) {
+        BigDecimal costDiff = purchase.getCost().subtract(p.getCost()).abs();
+        System.out.println(costDiff);
     }
 
-    public void printIsSameCost(Purchase... purchases) {
-        boolean sameCost = Arrays.stream(purchases).anyMatch(p -> p.getCost().compareTo(purchase.getCost()) == 0);
-        System.out.println(sameCost);
+    public void printIsSameCost(Purchase<? extends Priceable, ? extends Number> ... purchases) {
+        boolean isSameCost = false;
+        for (Purchase<? extends Priceable, ? extends Number> p : purchases) {
+            if (p.getCost().equals(purchase.getCost())) {
+                isSameCost = true;
+                break;
+            }
+        }
+        System.out.println(isSameCost);
     }
-
 }

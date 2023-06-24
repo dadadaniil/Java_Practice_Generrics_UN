@@ -3,25 +3,29 @@ package entity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Purchase {
-    private Item item;
-    private BigDecimal quantity;
+public class Purchase<T extends Priceable, N extends Number> {
+    private final T item;
+    private final N quantity;
 
-    public Purchase(Item item, BigDecimal quantity) {
+    public Purchase(T item, N quantity) {
         this.item = item;
         this.quantity = quantity;
     }
 
-    public Item getItem() {
+    public T getItem() {
         return item;
     }
 
-    public BigDecimal getQuantity() {
+    public N getQuantity() {
         return quantity;
     }
 
     public BigDecimal getCost() {
-        return item.getPrice().multiply(quantity).setScale(2, RoundingMode.HALF_UP);
+        return item.getPrice().multiply(BigDecimal.valueOf(quantity.doubleValue()));
+    }
+
+    @Override
+    public String toString() {
+        return item + ";" + quantity;
     }
 }
-
