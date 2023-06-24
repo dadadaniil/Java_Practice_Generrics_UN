@@ -3,9 +3,9 @@ package entity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Service extends Item {
-    private BigDecimal totalCost;
-    private int numberOfUsers;
+public class Service extends AbstractPriceable {
+    private final BigDecimal totalCost;
+    private final int numberOfUsers;
 
     public Service(String name, BigDecimal totalCost, int numberOfUsers) {
         super(name);
@@ -15,16 +15,11 @@ public class Service extends Item {
 
     @Override
     public BigDecimal getPrice() {
-        return totalCost.divide(new BigDecimal(numberOfUsers), RoundingMode.UP);
+        return totalCost.divide(BigDecimal.valueOf(numberOfUsers), RoundingMode.CEILING);
     }
 
     @Override
-    public String toString() {
-        return "Service{" +
-                "name=" + getName() +
-                ", totalCost=" + totalCost +
-                ", numberOfUsers=" + numberOfUsers +
-                ", pricePerUser=" + getPrice() +
-                '}';
+    protected String fieldsToString() {
+        return totalCost + ";" + numberOfUsers;
     }
 }

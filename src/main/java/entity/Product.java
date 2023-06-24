@@ -2,8 +2,8 @@ package entity;
 
 import java.math.BigDecimal;
 
-public class Product extends Item {
-    private BigDecimal price;
+public class Product extends AbstractPriceable {
+    private final BigDecimal price;
 
     public Product(String name, BigDecimal price) {
         super(name);
@@ -13,5 +13,10 @@ public class Product extends Item {
     @Override
     public BigDecimal getPrice() {
         return price;
+    }
+
+    @Override
+    protected String fieldsToString() {
+        return price.toString();
     }
 }
